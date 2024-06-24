@@ -18,6 +18,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <style>
         .select2-container {
@@ -163,11 +164,12 @@
  
     <script>
         $('.js-example-basic-single').select2();
+
         function buscarPermisos()
         {
             let url = "/user/permisos";
             fetch(url)
-            .then(response => response.json())
+           // .then(response => response.json())
             .then(data => {
                 let permisos = data;
                 let menu = document.querySelectorAll('.list-group-item');
@@ -182,7 +184,14 @@
                 });
             });
         }
-        document.addEventListener('DOMContentLoaded', buscarPermisos);
+
+
+        function cargar() {
+            setTimeout(() => {
+                buscarPermisos()
+            }, 2000);
+        }
+      //  document.addEventListener('DOMContentLoaded', buscarPermisos);
     </script>
   
     

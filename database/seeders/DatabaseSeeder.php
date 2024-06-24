@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        /*
         User::factory(10)->create();
         Categoria::factory(10)->create();
 
@@ -43,12 +44,15 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin'),
         ]);
 
+        */
+
         $user_bibliotecario = User::create([
             'name' => 'bibliotecario',
-            'email' => 'biblotecario@localhost.com',
+            'email' => 'bibliotecario@localhost.com',
             'password' => bcrypt('bibliotecario'),
         ]);
 
+        /*
         Recurso::create([
                 'titulo' => 'El principito',
                 'autor_id' =>  1,
@@ -59,6 +63,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
         $user_admin->permissions()->attach(Permission::all());
+
+        */
        
     }
 }

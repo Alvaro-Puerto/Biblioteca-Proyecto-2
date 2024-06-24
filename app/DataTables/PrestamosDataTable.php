@@ -33,14 +33,18 @@ class PrestamosDataTable extends DataTable
      */
     public function query(Prestamo $model): QueryBuilder
     {
-        $query = $model->newQuery();
-        $query ->join('usuarios', 'usuarios.id', '=', 'prestamos.usuario_id')
+
+        //$query = $model->newQuery();
+        $query = Prestamo::query()
+        ->join('usuarios', 'usuarios.id', '=', 'prestamos.usuario_id')
         ->join('recursos', 'recursos.id', '=', 'prestamos.recurso_id')
         ->select('prestamos.id',
                  'usuarios.nombres as usuario',
                  'recursos.tipo',
                  'prestamos.estado',
                  'recursos.titulo',
+                 'prestamos.motivo_prestamo',
+                 'prestamos.observaciones',
                  'fecha_hora_prestamo',
                  'fecha_hora_entrega',
                  'fecha_hora_devolucion',
@@ -48,8 +52,6 @@ class PrestamosDataTable extends DataTable
                  //'prestamos.updated_at'
                 );
 
-
-        error_log($query->get());
         return $query;
       
     }
@@ -87,6 +89,8 @@ class PrestamosDataTable extends DataTable
             Column::make('tipo')->title('Tipo'),        
             Column::make('titulo')->title('Recurso'),   
             Column::make('estado')->title('Estado'),       
+            Column::make('motivo_prestamo')->title('Motivo'),
+            Column::make('observaciones')->title('Observaciones'),
             Column::make('fecha_hora_prestamo')->title('Fecha del prestamo'),     
             Column::make('fecha_hora_entrega')->title('Fecha de entrega'),     
             Column::make('fecha_hora_devolucion')->title('Fecha de devolución'),     

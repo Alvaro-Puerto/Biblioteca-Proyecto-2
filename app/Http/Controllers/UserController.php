@@ -18,6 +18,6 @@ class UserController extends Controller
 
         $usuarioPermisos =  $user->permissions;
 
-        return response()->json($usuarioPermisos);
+        return $usuarioPermisos;
     }
 }

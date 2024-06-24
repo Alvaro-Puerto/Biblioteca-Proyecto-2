@@ -7,10 +7,13 @@
     </div>
     <div class="col">
         <div class="d-flex flex-row-reverse">
-       
+            <button class="btn btn-success ml-2 mr-2" onclick="excelExportar()">
+                Exportar excel
+            </button>
             <button class="btn btn-primary" onclick="buscar()">
                 Buscar
             </button>
+          
             <div class="form-group ">
                 <label for="">Fecha de fin</label>
                 <input type="date" name="" id="fin" class="form-control rounded-0">
@@ -45,6 +48,17 @@
 
 <script>
 
+    var dataPrestamo = [];
+    function excelExportar() {
+        const worksheet = XLSX.utils.json_to_sheet(dataPrestamo);
+
+        // Crear un libro de trabajo y añadir la hoja de cálculo
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Prestamo');
+
+        // Generar un archivo Excel y descargarlo
+        XLSX.writeFile(workbook, 'prestamos.xlsx');
+    }
 
     function iniciarBusqueda() {
         document.getElementById('inicio').value = '2024-01-01';
@@ -71,6 +85,7 @@
         .then((res) => res.json())
         .catch((error) => console.error("Error:", error))
         .then((response) => {
+            dataPrestamo = response;
             llenarTableT(response)
         });
     }

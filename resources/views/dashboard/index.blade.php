@@ -87,6 +87,7 @@
         iniciarBusqueda();
         iniciarBusquedaUsuario()
         rellanarActiveD()
+        buscarPermisos2()
     }
 
     function rellanarActiveD() {
@@ -94,6 +95,27 @@
         let el = document.getElementById('administrar dashboard');
         el.classList.add('active');
     }
+
+    function buscarPermisos2()
+        {
+            let url = "/user/permisos";
+            fetch(url)
+           .then(response => response.json())
+            .then(data => {
+                let permisos = data;
+                let menu = document.querySelectorAll('.list-group-item');
+                menu.forEach(element => {
+                    let id = element.id;
+                    if(permisos.some(x => x.name.includes(id)))
+                    {
+                        element.style.display = 'block';
+                    }else{
+                        element.style.display = 'none';
+                    }
+                });
+            });
+        }
+
 
     document.addEventListener('DOMContentLoaded', cargarTodo);
 </script>
