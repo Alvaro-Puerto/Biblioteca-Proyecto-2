@@ -78,6 +78,8 @@
     function rellanarActive() {
         let el = document.getElementById('administrar prestamo');
         el.classList.add('active');
+
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActive);
 </script>

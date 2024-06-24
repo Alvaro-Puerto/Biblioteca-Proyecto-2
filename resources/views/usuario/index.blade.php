@@ -89,6 +89,7 @@
     function rellanarActive() {
         let el = document.getElementById('administrar usuario-menu');
         el.classList.add('active');
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActive);
 </script>

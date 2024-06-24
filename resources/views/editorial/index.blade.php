@@ -80,6 +80,7 @@
     function rellanarActive() {
         let el = document.getElementById('administrar editorial');
         el.classList.add('active');
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActive);
 

@@ -59,6 +59,8 @@
     function rellanarActive() {
         let el = document.getElementById('editorial');
         el.classList.add('active');
+
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActiveUrs);
 

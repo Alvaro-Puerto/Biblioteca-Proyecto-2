@@ -169,7 +169,7 @@
         {
             let url = "/user/permisos";
             fetch(url)
-           // .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
                 let permisos = data;
                 let menu = document.querySelectorAll('.list-group-item');
@@ -185,12 +185,6 @@
             });
         }
 
-
-        function cargar() {
-            setTimeout(() => {
-                buscarPermisos()
-            }, 2000);
-        }
       //  document.addEventListener('DOMContentLoaded', buscarPermisos);
     </script>
   

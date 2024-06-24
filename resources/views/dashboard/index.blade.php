@@ -94,6 +94,8 @@
       
         let el = document.getElementById('administrar dashboard');
         el.classList.add('active');
+
+        
     }
 
     function buscarPermisos2()

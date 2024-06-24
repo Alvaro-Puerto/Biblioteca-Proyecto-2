@@ -75,6 +75,8 @@
     function rellanarActive() {
         let el = document.getElementById('administrar categoria');
         el.classList.add('active');
+
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActive);
 

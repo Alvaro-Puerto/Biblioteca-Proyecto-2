@@ -67,7 +67,7 @@
         let el = document.getElementById('administrar dashboard');
         el.classList.add('active');
 
-        
+        buscarPermisos()
         buscar();
 
     }

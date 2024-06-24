@@ -82,6 +82,8 @@
     function rellanarActive() {
         let el = document.getElementById('administrar recursos');
         el.classList.add('active');
+
+        buscarPermisos()
     }
     document.addEventListener('DOMContentLoaded', rellanarActive);
 
