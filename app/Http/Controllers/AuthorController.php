@@ -35,6 +35,15 @@ class AuthorController extends Controller
     }
 
 
+    public function libros($id) {
+        $autor = Author::find($id);
+
+        $autor->libros;
+
+        return response()->json($autor);
+
+    }
+
     public function json() {
         $autors = Author::where('estado', true)->get();
 

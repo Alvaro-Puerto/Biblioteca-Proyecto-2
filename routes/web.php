@@ -12,6 +12,7 @@ use App\Http\Controllers\RecursoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\Html\Editor\Editor;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +44,14 @@ Route::middleware('auth')->group(function() {
     Route::get('dashboard/usuario/libro/{usuario}', [DashboardController::class, 'usuario_prestamo_libro']);
     Route::resource('author', AuthorController::class);
     Route::get('author/json/get', [AuthorController::class, 'json']);
+    Route::get('author/libros/{id}', [AuthorController::class, 'libros']);
 
     Route::resource('categoria', CategoriaController::class);
     Route::get('categoria/json/get', [ CategoriaController::class, 'json']);
 
     Route::resource('editorial', EditorialController::class);
     Route::get('editorial/json/get', [ EditorialController::class, 'json']);
+    Route::get('editorial/detalles/{id}', [EditorialController::class, 'detalles']);
 
     Route::resource('usuario', UsuarioController::class);
     Route::get('usuario/json/get', [ UsuarioController::class, 'json']);

@@ -9,6 +9,8 @@
                         <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#crearEditorial"> Agregar</button>
                         <button type="button" class="btn btn-warning m-2" onclick="editar()" data-bs-toggle="modal" data-bs-target="#editarEditorial">Editar</button>
                         <button type="button" class="btn btn-danger  m-2" onclick="eliminar()" data-bs-toggle="modal" data-bs-target="#eliminarEditorial">Anular/Activar</button>
+                        <button type="button" class="btn btn-success  m-2" onclick="reportesEditorial()" data-bs-toggle="modal" data-bs-target="#reporteEditorial">Reportes</button>
+
 
                     </div>
                 </div>
@@ -31,12 +33,21 @@
     @include('editorial.eliminar')
 </div>
 
+
+<div class="modal fade" id="reporteEditorial" tabindex="-1" aria-labelledby="reporteEditorialLabel" aria-hidden="true">
+    @include('editorial.reporte')
+</div>
+
 @endsection
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 @endpush
 
 <script>
+
+    var dataAuhtorEditoria = []
+    var dataRecursoEditorial = []
+
     function editar() {
        let data = obtenerFilaSeleccionada();
 
@@ -54,6 +65,55 @@
         let form = document.forms['form-editorial-eliminar'];
        form.action = '/editorial/' + data.id;
        
+    }
+
+    function reportesEditorial() {
+        let data = obtenerFilaSeleccionada();
+        fetch('/editorial/detalles/' + data.id)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            dataAuhtorEditoria = data.authores;
+            dataRecursoEditorial = data.recurso
+            llenarTableE(data.recurso);
+            llenarTableu(data.authores);
+        })
+        .catch(error => console.error('Error fetching JS:', error));
+    }
+
+    function llenarTableu(data) {
+        let htmlTr = ``;
+
+        data.forEach(x => {
+            htmlTr += `
+                <tr>
+                    <td>${x.nombres}</td>
+                    <td>${x.apellidos}</td>
+                    <td>${x.sexo}</td>
+                    <td>${x.pais}</td>
+                </tr>
+            `
+        });
+
+        document.getElementById('tbody-reporte-author-editorial').innerHTML = htmlTr;   
+    }
+    
+    function llenarTableE(data) {
+        let htmlTr = ``;
+
+        data.forEach(x => {
+            htmlTr += `
+                <tr>
+                    <td>${x.titulo}</td>
+                    <td>${x.descripcion}</td>
+                    <td>${x.inventario}</td>
+                    <td>${x.created_at}</td>
+                </tr>
+            `
+        });
+
+        document.getElementById('tbody-reporte-libros').innerHTML = htmlTr;
     }
 
 

@@ -9,4 +9,8 @@ class Author extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function libros() {
+        return $this->hasMany(Recurso::class);
+    }
 }

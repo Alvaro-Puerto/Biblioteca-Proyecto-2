@@ -9,7 +9,8 @@
                         <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#crearEditorial"> Agregar</button>
                         <button type="button" class="btn btn-warning m-2" onclick="editar()" data-bs-toggle="modal" data-bs-target="#editarEditorial">Editar</button>
                         <button type="button" class="btn btn-danger  m-2" onclick="eliminar()" data-bs-toggle="modal" data-bs-target="#eliminarEditorial">Anular/Activar</button>
-
+                        <button type="button" class="btn btn-danger  m-2" onclick="obtenerReporte()"  data-bs-toggle="modal" data-bs-target="#reporteAuthor">Reportes</button>
+                       
                     </div>
                 </div>
                 <div class="card-body">
@@ -31,12 +32,18 @@
     @include('author.eliminar')
 </div>
 
+<div class="modal fade" id="reporteAuthor" tabindex="-1" aria-labelledby="reporteAuthorLabel" aria-hidden="true">
+    @include('author.reporte')
+</div>
+
+
 @endsection
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 @endpush
 
 <script>
+    var dataAuthor = [];
     function editar() {
         populateCountries();
        let data = obtenerFilaSeleccionada();
@@ -85,6 +92,33 @@
         return data;
     }
 
+    function obtenerReporte() {       
+        let data = obtenerFilaSeleccionada();
+        fetch('/author/libros/' + data.id)
+        .then(response => response.json())
+        .then(data => {
+            dataAuthor = data.libros;
+            llenarTable(data.libros);
+        })
+        .catch(error => console.error('Error fetching JS:', error));
+    }
+
+    function llenarTable(data) {
+        let htmlTr = ``;
+
+        data.forEach(x => {
+            htmlTr += `
+                <tr>
+                    <td>${x.titulo}</td>
+                    <td>${x.descripcion}</td>
+                    <td>${x.inventario}</td>
+                    <td>${x.created_at}</td>
+                </tr>
+            `
+        });
+
+        document.getElementById('tbody-reporte-author').innerHTML = htmlTr;
+    }
 
     function rellanarActive() {
         let el = document.getElementById('administrar author');
