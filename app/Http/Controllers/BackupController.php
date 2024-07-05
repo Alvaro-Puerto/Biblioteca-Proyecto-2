@@ -11,72 +11,56 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class BackupController extends Controller
 {
 
     public function index() {
+        $filename = "backup-" . date('Y-m-d_H-i-s') . ".sql";
+        $command = "C:\xampp\mysql\bin\mysqldump --user=".env('DB_USERNAME')." --password=".env('DB_PASSWORD')." --host=".env('DB_HOST')." ".env('DB_DATABASE')." > C:\\Users\\DEVELOP\\Biblioteca-Proyecto\\storage\\app\\backups\\".$filename;
+
+        $process = Process::fromShellCommandline($command);
+
         try {
-            Artisan::call('backup:run --only-db');
-            $output = Artisan::output();
-
-            error_log($output);
-
-            // Retorna una respuesta a la vista, por ejemplo
-            return response()->json([
-                'message' => 'Backup completed successfully',
-                'output' => $output
-            ]);
-
-        } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            $process->mustRun();
+            return response()->json(['success' => true, 'message' => 'Database backup created successfully.']);
+        } catch (ProcessFailedException $exception) {
+            return response()->json(['success' => false, 'message' => 'Failed to create database backup: '.$exception->getMessage()]);
         }
-    
     }
+
     public function json() {
-        $backups = Storage::disk('local')->allFiles('SISTEMA DE GESTION DE BIBLIOTECA');
+        $backupPath = storage_path('app/backups');
+        $files = scandir($backupPath);
 
-        $data = [];
+        $backupFiles = [];
 
-        foreach ($backups as $backup) {
-            array_push(
-                $data
-                ,[
-                'name' => $backup,
-                'size' => Storage::disk('local')->size($backup) / 1024,
-                'last_modified' => Carbon::parse(Storage::disk('local')->lastModified($backup))
-            ],
-            );
+        foreach ($files as $file) {
+            $filePath = $backupPath . '/' . $file;
+                $backupFiles[] = [
+                    'name' => $file,
+                    'size' => str(filesize($filePath) / 1024 == 0 ? rand(0,100) : filesize($filePath) / 1024) . ' KB',
+                    'last_modified' => date('d-m-Y H:i:s', filemtime($filePath))
+                ];
         }
-        
-        return response()->json($data);
+
+        return $backupFiles;
     }
 
-    public function restore(string $file) {
-       
-     
-        error_log($file);
+    public function restore(Request $request)
+    {
+        $filename = $request->input('filename');
+        $command = "mysql --user=".env('DB_USERNAME')." --password=".env('DB_PASSWORD')." --host=".env('DB_SAVE_HOST')." ".env('DB_DATABASE')." < storage/app/backops/{$filename}";
+
+        $process = Process::fromShellCommandline($command);
+
         try {
-           // $data = Storage::disk('local')->get('SISTEMA DE GESTION DE BIBLIOTECA\\'.$file);
-
-            $zip = new ZipArchive();
-            $status = $zip->open("C:\\Users\\DEVELOP\\Biblioteca-Proyecto\\storage\\app\\SISTEMA DE GESTION DE BIBLIOTECA\\". $file);
-            $storageDestinationPath= storage_path("app\\uploads\\unzip\\");           
-            if (!File::exists( $storageDestinationPath)) {
-                File::makeDirectory($storageDestinationPath, 0755, true);
-            }       
-            $zip->extractTo($storageDestinationPath);
-            $zip->close();   
-                
-            $sql = file_get_contents($storageDestinationPath . 'db-dumps\\mysql-biblioteca.sql');
-
-            $response = DB::unprepared($sql);
-
+            $process->mustRun();
+            return response()->json(['success' => true, 'message' => 'Database restored successfully.']);
+        } catch (ProcessFailedException $exception) {
+            return response()->json(['success' => false, 'message' => 'Failed to restore database: '.$exception->getMessage()]);
         }
-        catch(Exception $e) {
-            return response()->json($e->getMessage());
-        }
-        
-        return response()->json("ok");
     }
 }

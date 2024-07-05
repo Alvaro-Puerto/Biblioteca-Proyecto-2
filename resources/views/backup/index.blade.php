@@ -11,7 +11,7 @@
      </div>
      <div class="col">
          <div class="d-flex flex-row-reverse">
-              
+              <button class="btn btn-primary" onclick="crearBackup()">Restaurar</button>
            </div>
      </div>
     </div>
@@ -78,6 +78,8 @@
                 document.getElementById('alerta').style.display = 'block'
                 return false;
             });
+        
+            window.location.reload();
 
         return false;
     }
